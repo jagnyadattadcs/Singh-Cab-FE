@@ -4,7 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 // API Base URL for your backend
-const API_BASE_URL = "https://singhcabbackend.onrender.com/api";
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 const Modal = ({ car, onClose }) => {
   if (!car) return null;
@@ -53,7 +53,7 @@ const Modal = ({ car, onClose }) => {
             {car.images.map((image, index) => (
               <img
                 key={index}
-                src={`https://singhcabbackend.onrender.com/uploads/cars/${image}`}
+                src={`${API_BASE_URL}/uploads/cars/${image}`}
                 alt={`${car.name} - ${index + 1}`}
                 className="rounded-lg w-full h-24 sm:h-36 md:h-40 object-cover transition-transform transform hover:scale-105"
               />
@@ -88,17 +88,14 @@ const Modal = ({ car, onClose }) => {
                 <p className="text-lg font-medium">{car.mileage}</p>
               </div>
               <div className="bg-gray-900 p-3 sm:p-4 rounded-lg">
-                <p className="text-sm text-gray-400">Price per Km</p>
+                <p className="text-sm text-gray-400">Price per Km (for cab)</p>
                 <p className="text-lg font-medium">₹{car.pricePerKm}</p>
               </div>
               <div className="bg-gray-900 p-3 sm:p-4 rounded-lg">
-                <p className="text-sm text-gray-400">Price per Hour</p>
+                <p className="text-sm text-gray-400">Price per Hour (for self drive)</p>
                 <p className="text-lg font-medium">₹{car.pricePerHour}</p>
               </div>
-              <div className="bg-gray-900 p-3 sm:p-4 rounded-lg col-span-1 sm:col-span-2">
-                <p className="text-sm text-gray-400">Total Price</p>
-                <p className="text-lg font-medium">{car.price}</p>
-              </div>
+              
             </div>
 
             <div className="mt-4">
@@ -139,6 +136,15 @@ export default function App() {
       }
     };
     fetchCarData();
+  }, []);
+
+  // inside your Vehicles component
+  useEffect(() => {
+    const savedType = localStorage.getItem("selectedType");
+    if (savedType) {
+      setSelectedType(savedType);
+      localStorage.removeItem("selectedType"); // clear after use
+    }
   }, []);
 
   useEffect(() => {
@@ -184,8 +190,14 @@ export default function App() {
     setShowModal(true);
   };
 
-  const handleBookNow = () => {
-    // Navigate to the booking form and pass the car ID as a state
+  const handleBookNow = (car) => {
+    // Save car data to localStorage for auto-fill in booking form
+    localStorage.setItem("selectedCar", JSON.stringify({
+      carType: car.type,
+      carModel: car.model
+    }));
+    
+    // Navigate to the booking form
     navigate(`/bookingForm`);
   };
 
@@ -287,7 +299,7 @@ export default function App() {
               <div className="relative">
                 {car.images && car.images.length > 0 ? (
                   <img
-                    src={`https://singhcabbackend.onrender.com/uploads/cars/${car.images[0]}`}
+                    src={`${API_BASE_URL}/uploads/cars/${car.images[0]}`}
                     alt={car.name}
                     className="w-full h-48 sm:h-56 object-cover"
                   />
@@ -346,7 +358,7 @@ export default function App() {
                 </div>
                 <div className="flex flex-col sm:flex-row justify-center gap-3">
                   <button
-                    onClick={() => handleBookNow(car._id)}
+                    onClick={() => handleBookNow(car)}
                     className="flex-1 px-4 py-2 sm:py-3 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-300"
                   >
                     BOOK NOW
