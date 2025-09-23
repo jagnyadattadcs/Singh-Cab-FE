@@ -355,7 +355,7 @@ const ContactAndBooking = () => {
               animate={{ opacity: 1 }}
               transition={{ duration: 1 }}
             >
-              <div className="absolute top-0 bottom-0 left-0 w-full bg-black md:bg-transparent md:w-full md:bg-transparent transform skew-y-12 origin-bottom-right"></div>
+              <div className="absolute top-0 bottom-0 left-0 w-full bg-black md:bg-transparent md:w-full transform skew-y-12 origin-bottom-right"></div>
               <img
                 src="https://i.pinimg.com/236x/94/3b/37/943b3731d7471be0fc3f6af944ed0f74.jpg"
                 alt="Red Ford Mustang"
