@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
-import { nav } from "framer-motion/client";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -31,7 +29,6 @@ export default function BookingForm({ selectedCar, onBookingSuccess }) {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const mode = localStorage.getItem("bookingMode");
@@ -174,9 +171,7 @@ export default function BookingForm({ selectedCar, onBookingSuccess }) {
         });
 
         setShowSuccessPopup(true);
-        setTimeout(() => setShowSuccessPopup(false), 3000); // hide after 3 sec
-
-        navigate("/"); // Redirect to home or another page
+        setTimeout(() => setShowSuccessPopup(false), 9000); // hide after 3 sec
 
         // Clear the saved car data after successful booking
         localStorage.removeItem("selectedCar");
@@ -249,7 +244,7 @@ export default function BookingForm({ selectedCar, onBookingSuccess }) {
             {/* Conditional Forms */}
             {!showSelfDriveForm ? (
               <form
-                className="grid grid-cols-2 gap-4 text-white"
+                className="md:grid grid-cols-2 gap-4 text-white"
                 onSubmit={handleSubmit}
               >
                 {/* Column 1 */}
@@ -401,7 +396,7 @@ export default function BookingForm({ selectedCar, onBookingSuccess }) {
               </form>
             ) : (
               <form
-                className="grid grid-cols-2 gap-4 text-white"
+                className="sm:grid grid-cols-2 gap-4 text-white"
                 onSubmit={handleSubmit}
               >
                 <div className="flex flex-col gap-3">
